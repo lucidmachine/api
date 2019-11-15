@@ -1,98 +1,80 @@
-[![Circle CI](https://circleci.com/gh/lansingcodes/api.svg?style=svg)](https://circleci.com/gh/lansingcodes/api) [![Dependency Status](https://gemnasium.com/lansingcodes/api.svg)](https://gemnasium.com/lansingcodes/api) [![Test Coverage](https://codeclimate.com/github/lansingcodes/api/badges/coverage.svg)](https://codeclimate.com/github/lansingcodes/api/coverage) [![Code Climate](https://codeclimate.com/github/lansingcodes/api/badges/gpa.svg)](https://codeclimate.com/github/lansingcodes/api)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b772609a-aedb-45c7-8298-f4623db20ecc/deploy-status)](https://app.netlify.com/sites/lansingcodes-api-staging/deploys)
 
-# Lansing Codes API
+# Firebase-backed API for Lansing Codes
 
-A public API to retrieve information about code-related events in Lansing, MI.
+This repository consists of tooling to manage Firebase rules, indexes, etc. and
+lambda functions deployed to Netlify to manage the data collected in Firebase.
 
-## Usage
+## Using the data
 
-### Base URL
+The Lansing Codes data is publicly available. Here's the data model:
 
-```
-http://api.lansing.codes/v1
-```
+![Lansing Codes Data Model](https://i.imgur.com/L2Xl8zt.jpg)
 
-### Events
+To access the data, you must use a
+[Firebase client](https://firebase.google.com/docs/firestore/quickstart#set_up_your_development_environment)
+to connect to the Firebase Firestore of the appropriate environment.
 
-#### `/events/upcoming/list`
+### Firebase config
 
-Returns the next upcoming event for each meetup group.
+To access the data, you must configure your Firebase client to connect to the
+right data store. The following list of publicly available data stores are
+available.
 
-#### `/events/upcoming/search/:query`
+All configurations are shown in JavaScript.
 
-Returns the next upcoming event for the first group matching the query.
+#### Staging
 
-#### Response format
-
-This API *sort of* conforms to the [JSON API spec](http://jsonapi.org/). Where it doesn't conform, it's because I either didn't read that part or I [disagree with it](http://discuss.jsonapi.org/t/why-is-included-an-array/76/2).
-
-``` json
-{
-  "data": [
-    {
-      "links": {
-        "self": "http://www.meetup.com/Lansing-Ruby-Meetup-Group/events/223606469/"
-      },
-      "attributes": {
-        "id": "dwsnthytlbpb",
-        "name": "Ruby Hack Night",
-        "description": "<p>Our summer events will focus on programming Ruby. Bring a project or something small you're passionate about and we'll give you five minutes to talk about it at the start of the meeting. Afterward, we'll be having pizza and beer and hacking away on whatever people bring.</p>",
-        "time": {
-          "absolute": 1439334000000,
-          "relative": "12 days"
-        },
-        "capacity": 20,
-        "rsvps": {
-          "yes": 3,
-          "maybe": 0
-        },
-        "status": "upcoming"
-      },
-      "relationships": {
-        "venue": {
-          "type": "venues",
-          "id": 19922032
-        },
-        "group": {
-          "type": "groups",
-          "id": 11398352
-        }
-      }
-    }
-  ],
-  "included": {
-    "venues": {
-      "19922032": {
-        "name": "The Technology Innovation Center",
-        "address": "325 East Grand River Avenue, East Lansing, MI",
-        "latitude": 42.73457,
-        "longitude": -84.481125,
-        "directions": "On the 3rd Floor (take the elevator past Douglas J)"
-      }
-    },
-    "groups": {
-      "11398352": {
-        "name": "Lansing Ruby Meetup Group",
-        "slug": "Lansing-Ruby-Meetup-Group",
-        "members": "Members"
-      }
-    }
-  }
+``` js
+const firebaseConfig = {
+  apiKey: "AIzaSyBukJRUN9wfHFnZc_fjBRRHNsLSCTxqhGQ",
+  authDomain: "lansing-codes-staging.firebaseapp.com",
+  databaseURL: "https://lansing-codes-staging.firebaseio.com",
+  projectId: "lansing-codes-staging",
+  storageBucket: "lansing-codes-staging.appspot.com",
+  messagingSenderId: "36794992743",
+  appId: "1:36794992743:web:2350879a650f171e"
 }
 ```
 
-## Contributing
+#### Production
 
-To run the API and its specs locally, you'll need to [register for a meetup.com API key](https://secure.meetup.com/meetup_api/key/), which actually only takes a few seconds.
-
-Then to run the API server:
-
+``` js
+var firebaseConfig = {
+  apiKey: "AIzaSyCMw8mZ1D1GAYpeotAqVCaYAMtn3URVOok",
+  authDomain: "lansing-codes.firebaseapp.com",
+  databaseURL: "https://lansing-codes.firebaseio.com",
+  projectId: "lansing-codes",
+  storageBucket: "lansing-codes.appspot.com",
+  messagingSenderId: "647280182517",
+  appId: "1:647280182517:web:779f72d0b90c0dd4"
+}
 ```
-MEETUP_API_KEY=<MY_API_KEY> bundle exec rackup
-```
 
-And to run the tests:
+## Questions
 
-```
-MEETUP_API_KEY=<MY_API_KEY> bundle exec rspec
-```
+For general support, direct your questions to the
+[Lansing Codes Slack team](http://slack.lansing.codes). The issue list for this
+project is exclusively for bug reports and feature requests.
+
+## Stay in touch
+
+- [Slack](http://slack.lansing.codes)
+- [Twitter](https://twitter.com/lansingcodes)
+- [Facebook](https://www.facebook.com/lansingcodes)
+- [Website](https://www.lansing.codes)
+- [Newsletter](http://bit.ly/lansing-codes-newsletter)
+
+## Contribution
+
+You are welcome and encouraged to make changes to this repository by submitting
+pull requests or forking our code to support your city of coders!
+
+Before you get ahead of yourself, though, please read our
+[Contributing Guide](https://github.com/lansingcodes/api/blob/master/.github/CONTRIBUTING.md).
+
+## License
+
+[MIT - Hippocratic](https://firstdonoharm.dev)
+
+Copyright (c) 2015-present, Humanity Codes LLC
